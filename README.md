@@ -1,7 +1,5 @@
 # revit-mcp
 
-<<<<<<< Updated upstream
-=======
 English | [简体中文](README_zh.md)
 
 ## description
@@ -56,6 +54,8 @@ Claude client -> Settings > Developer > Edit Config > claude_desktop_config.json
 Restart the claude client
 
 4. Start the communication in revit through the revit-mcp-plugin plugin
+=======
+revit-mcp is a tool that allows you to interact with Revit using the MCP protocol.
 
 ## implementation framework
 
@@ -67,7 +67,6 @@ flowchart LR
 	end
 ```
 
->>>>>>> Stashed changes
 #### Tools
 
 | Name                      | Description                               |

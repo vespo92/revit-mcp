@@ -15,10 +15,10 @@ registerTools(server);
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Server running...");
+  console.error("Revit MCP Server start success");
 }
 
 main().catch((error) => {
-  console.error("Error starting server:", error);
+  console.error("Error starting Revit MCP Server:", error);
   process.exit(1);
 });

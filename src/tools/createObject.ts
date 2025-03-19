@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { RevitClientConnection } from "../RevitClientConnection.js";
 
 // 辅助函数：获取类型的中文名称
 export function getChineseTypeName(type: string): string {
@@ -15,6 +16,7 @@ export function getChineseTypeName(type: string): string {
 export function registerCreateObjectTool(server: McpServer) {
   server.tool(
     "create_object",
+    "create revit object",
     {
       objectType: z
         .enum(["WALL", "DOOR", "WINDOW", "FLOOR"])
@@ -138,7 +140,16 @@ export function registerCreateObjectTool(server: McpServer) {
             break;
         }
 
-        // 这里应该发送命令到后端
+        // 发送命令到Revit
+        const revitClient = new RevitClientConnection("localhost", 8080);
+        if (revitClient.connect()) {
+          revitClient.sendCommand(JSON.stringify(params));
+        } else {
+          return {
+            content: [{ type: "text", text: "Revit客户端连接失败" }],
+            isError: true,
+          };
+        }
         // const result = await sendCommand("create_object", params);
 
         return {
