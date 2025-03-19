@@ -136,9 +136,9 @@ export class RevitClientConnection {
         setTimeout(() => {
           if (this.responseCallbacks.has(requestId)) {
             this.responseCallbacks.delete(requestId);
-            reject(new Error(`Command timed out after 30 seconds: ${command}`));
+            reject(new Error(`Command timed out after 2 minutes: ${command}`));
           }
-        }, 30000); // 30秒超时
+        }, 120000); // 2分钟超时
       } catch (error) {
         reject(error);
       }
