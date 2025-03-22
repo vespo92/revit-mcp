@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { RevitClientConnection } from "../RevitClientConnection.js";
+import { RevitClientConnection } from "../utils/SocketClient.js";
 
 // 辅助函数：获取类型的中文名称
 export function getChineseTypeName(type: string): string {

@@ -10,10 +10,10 @@ const server = new McpServer({
 
 // 启动服务器
 async function main() {
-  // 先注册工具
+  // 注册工具
   await registerTools(server);
 
-  // 然后再连接到传输层
+  // 连接到传输层
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("Revit MCP Server start success");

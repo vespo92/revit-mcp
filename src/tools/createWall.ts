@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { RevitClientConnection } from "../RevitClientConnection.js";
+import { RevitClientConnection } from "../utils/SocketClient.js";
 
 export function registerCreateWallTool(server: McpServer) {
   server.tool(

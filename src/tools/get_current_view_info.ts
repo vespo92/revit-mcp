@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { withRevitConnection } from "../utils/revitConnectionManager.js";
+import { withRevitConnection } from "../utils/ConnectionManager.js";
 
 export function registerGetCurrentViewInfoTool(server: McpServer) {
   server.tool(

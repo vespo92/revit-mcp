@@ -1,4 +1,4 @@
-import { RevitClientConnection } from "../RevitClientConnection.js";
+import { RevitClientConnection } from "./SocketClient.js";
 
 /**
  * 连接到Revit客户端并执行操作
