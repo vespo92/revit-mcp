@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { RevitClientConnection } from "../RevitClientConnection.js";
+import { withRevitConnection } from "../utils/revitConnectionManager.js";
 
 export function registerGetCurrentViewElementsTool(server: McpServer) {
   server.tool(
@@ -35,51 +35,17 @@ export function registerGetCurrentViewElementsTool(server: McpServer) {
         includeHidden: args.includeHidden || false,
         limit: args.limit || 100,
       };
-      const revitClient = new RevitClientConnection("localhost", 8080);
 
       try {
-        await new Promise<void>((resolve, reject) => {
-          if (revitClient.isConnected) {
-            resolve();
-            return;
-          }
-
-          const onConnect = () => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            resolve();
-          };
-          const onError = (error: any) => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            reject(new Error("connect to revit client failed"));
-          };
-
-          revitClient.socket.on("connect", onConnect);
-          revitClient.socket.on("error", onError);
-
-          revitClient.connect();
-
-          setTimeout(() => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            reject(new Error("连接到Revit客户端失败"));
-          }, 5000);
+        const response = await withRevitConnection(async (revitClient) => {
+          return await revitClient.sendCommand(
+            "get_current_view_elements",
+            params
+          );
         });
-
-        const response = await revitClient.sendCommand(
-          "get_current_view_elements",
-          params
-        );
 
         return {
           content: [
-            {
-              type: "text",
-              text: `获取当前视图元素成功！\n元素数量: ${
-                response.elements?.length || 0
-              }`,
-            },
             {
               type: "text",
               text: JSON.stringify(response.elements, null, 2),
@@ -91,14 +57,12 @@ export function registerGetCurrentViewElementsTool(server: McpServer) {
           content: [
             {
               type: "text",
-              text: `获取当前视图元素失败: ${
+              text: `get current view elements failed: ${
                 error instanceof Error ? error.message : String(error)
               }`,
             },
           ],
         };
-      } finally {
-        revitClient.disconnect();
       }
     }
   );
