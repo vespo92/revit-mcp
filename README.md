@@ -74,9 +74,9 @@ flowchart LR
 | get_current_view_info     | Get current view info                     |
 | get_current_view_elements | Get current view elements                 |
 | get_available_family_types | Get available family types in current project |
-| create_point_type_element  | Create point type element (door, window, furniture) |
-| create_line_type_element   | Create line type element (wall, beam) |
-| create_area_type_element   | Create area type element (floor, ceiling) |
+| create_point_based_element  | Create point based element (door, window, furniture) |
+| create_line_based_element   | Create line based element (wall, beam, pipe) |
+| create_surface_based_element   | Create surface based element (floor, ceiling) |
 | delete_element             | Delete element                            |
 | modify_element             | Modify element's properties (instance parameters) |
 | search_modules             | Search for available modules              |

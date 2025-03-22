@@ -76,9 +76,9 @@ flowchart LR
 | get_current_view_info      | 获得当前视图信息                   |
 | get_current_view_elements  | 获得当前视图的元素                 |
 | get_available_family_types | 获得当前项目中可以使用的族类型         |
-| create_point_type_element  | 创建点类元素（例如门、窗、家具） |
-| create_line_type_element   | 创建线类元素（例如墙、梁） |
-| create_area_type_element   | 创建面类元素（例如地板、天花板） |
+| create_point_based_element  | 创建点式元素（例如门、窗、家具等） |
+| create_line_based_element   | 创建线式元素（例如墙、梁、管道等） |
+| create_surface_based_element   | 创建面状元素（例如地板、天花板等） |
 | delete_element             | 删除元素                           |
 | modify_element             | 修改元素的属性（实例参数）         |
 | search_modules             | 搜索可用模块                       |

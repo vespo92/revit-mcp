@@ -1,62 +1,44 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { RevitClientConnection } from "../utils/SocketClient.js";
+import { withRevitConnection } from "../utils/ConnectionManager.js";
 
 export function registerSendCodeToRevitTool(server: McpServer) {
   server.tool(
     "send_code_to_revit",
-    "Send code to Revit for execution",
+    "Send C# code to Revit for execution. The code will be inserted into a template with access to the Revit Document and parameters. Your code should be written to work within the Execute method of the template.",
     {
-      code: z.string().describe("The code to send to Revit"),
+      code: z
+        .string()
+        .describe(
+          "The C# code to execute in Revit. This code will be inserted into the Execute method of a template with access to Document and parameters."
+        ),
       parameters: z
         .array(z.any())
         .optional()
-        .describe("Execution parameters (array of objects)"),
+        .describe(
+          "Optional execution parameters that will be passed to your code"
+        ),
     },
     async (args, extra) => {
-      const params = { code: args.code, parameters: args.parameters };
-      const revitClient = new RevitClientConnection("localhost", 8080);
+      const params = {
+        code: args.code,
+        parameters: args.parameters || [],
+      };
 
       try {
-        await new Promise<void>((resolve, reject) => {
-          if (revitClient.isConnected) {
-            resolve();
-            return;
-          }
-
-          const onConnect = () => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            resolve();
-          };
-          const onError = (error: any) => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            reject(new Error("连接到Revit客户端失败"));
-          };
-
-          revitClient.socket.on("connect", onConnect);
-          revitClient.socket.on("error", onError);
-
-          revitClient.connect();
-
-          setTimeout(() => {
-            revitClient.socket.removeListener("connect", onConnect);
-            revitClient.socket.removeListener("error", onError);
-            reject(new Error("连接到Revit客户端失败"));
-          }, 5000);
+        const response = await withRevitConnection(async (revitClient) => {
+          return await revitClient.sendCommand("send_code_to_revit", params);
         });
-
-        const response = await revitClient.sendCommand(
-          "sendCodeToRevit",
-          params
-        );
 
         return {
           content: [
             {
               type: "text",
-              text: `代码执行成功！\n结果: ${response.result}`,
+              text: `Code execution successful!\nResult: ${JSON.stringify(
+                response,
+                null,
+                2
+              )}`,
             },
           ],
         };
@@ -65,12 +47,12 @@ export function registerSendCodeToRevitTool(server: McpServer) {
           content: [
             {
               type: "text",
-              text: "Failed to send code to Revit",
+              text: `Code execution failed: ${
+                error instanceof Error ? error.message : String(error)
+              }`,
             },
           ],
         };
-      } finally {
-        revitClient.disconnect();
       }
     }
   );
