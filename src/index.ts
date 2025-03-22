@@ -2,17 +2,18 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerTools } from "./tools/register.js";
 
-// create a server instance
+// 创建服务器实例
 const server = new McpServer({
   name: "revit-mcp",
   version: "1.0.0",
 });
 
-// register tools
-registerTools(server);
-
-// start the server
+// 启动服务器
 async function main() {
+  // 先注册工具
+  await registerTools(server);
+
+  // 然后再连接到传输层
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("Revit MCP Server start success");
