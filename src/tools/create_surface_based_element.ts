@@ -5,52 +5,51 @@ import { withRevitConnection } from "../utils/ConnectionManager.js";
 export function registerCreateSurfaceBasedElementTool(server: McpServer) {
   server.tool(
     "create_surface_based_element",
-    "Create a surface-based element in Revit such as floors, ceilings, or roofs. Requires a family type ID, boundary points, and a level ID.All units are in millimeters (mm).",
+    "Create one or more surface-based elements in Revit such as floors, ceilings, or roofs. Supports batch creation with detailed parameters including family type ID, boundary lines, thickness, and level information. All units are in millimeters (mm).",
     {
-      familyTypeId: z.string().describe("The ID of the family type to create"),
-      boundaryPoints: z
+      data: z
         .array(
           z.object({
-            x: z.number().describe("X coordinate"),
-            y: z.number().describe("Y coordinate"),
-            z: z.number().optional().describe("Z coordinate (optional)"),
+            name: z
+              .string()
+              .describe("Description of the element (e.g., floor, ceiling)"),
+            familyTypeId: z
+              .number()
+              .describe("The ID of the family type to create"),
+            boundary: z
+              .object({
+                outerLoop: z
+                  .array(
+                    z.object({
+                      P0: z.object({
+                        X: z.number().describe("X coordinate of start point"),
+                        Y: z.number().describe("Y coordinate of start point"),
+                        Z: z.number().describe("Z coordinate of start point"),
+                      }),
+                      P1: z.object({
+                        X: z.number().describe("X coordinate of end point"),
+                        Y: z.number().describe("Y coordinate of end point"),
+                        Z: z.number().describe("Z coordinate of end point"),
+                      }),
+                    })
+                  )
+                  .min(3)
+                  .describe("Array of line segments defining the boundary"),
+              })
+              .describe("Boundary definition with outer loop"),
+            Thickness: z.number().describe("Thickness of the element"),
+            BaseLevel: z.number().describe("Base level height"),
+            BaseOffset: z.number().describe("Offset from the base level"),
           })
         )
-        .min(3)
-        .describe(
-          "The boundary points defining the perimeter of the surface (minimum 3 points)"
-        ),
-      levelId: z.string().describe("The ID of the level for the element"),
-      structural: z
-        .boolean()
-        .optional()
-        .describe("Whether the element is structural (for structural floors)"),
-      slope: z
-        .number()
-        .optional()
-        .describe("Slope angle in degrees (for sloped floors or roofs)"),
-      height: z.number().optional().describe("Height offset from the level"),
+        .describe("Array of surface-based elements to create"),
     },
     async (args, extra) => {
-      const params = {
-        familyTypeId: args.familyTypeId,
-        boundaryPoints: args.boundaryPoints.map((point) => ({
-          x: point.x,
-          y: point.y,
-          z: point.z || 0,
-        })),
-        levelId: args.levelId,
-        structural: args.structural || false,
-        slope: args.slope || 0,
-        height: args.height || 0,
-      };
-
       try {
         const response = await withRevitConnection(async (revitClient) => {
-          return await revitClient.sendCommand(
-            "create_surface_based_element",
-            params
-          );
+          return await revitClient.sendCommand("create_surface_based_element", {
+            params: args,
+          });
         });
 
         return {
