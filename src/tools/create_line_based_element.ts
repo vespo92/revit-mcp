@@ -5,47 +5,48 @@ import { withRevitConnection } from "../utils/ConnectionManager.js";
 export function registerCreateLineBasedElementTool(server: McpServer) {
   server.tool(
     "create_line_based_element",
-    "Create a line-based element in Revit such as walls, beams, or pipes. Requires a family type ID, start and end points. All units are in millimeters (mm).",
+    "Create one or more line-based elements in Revit such as walls, beams, or pipes. Supports batch creation with detailed parameters including family type ID, start and end points, thickness, height, and level information. All units are in millimeters (mm).",
     {
-      familyTypeId: z.string().describe("The ID of the family type to create"),
-      startPoint: z
-        .object({
-          x: z.number().describe("X coordinate of start point"),
-          y: z.number().describe("Y coordinate of start point"),
-          z: z.number().describe("Z coordinate of start point"),
-        })
-        .describe("The start point coordinates of the line-based element"),
-      endPoint: z
-        .object({
-          x: z.number().describe("X coordinate of end point"),
-          y: z.number().describe("Y coordinate of end point"),
-          z: z.number().describe("Z coordinate of end point"),
-        })
-        .describe("The end point coordinates of the line-based element"),
-      structuralUsage: z
-        .boolean()
-        .optional()
-        .describe(
-          "Whether the element is structural (for beams, columns, etc.)"
-        ),
-      width: z
-        .number()
-        .optional()
-        .describe("Width/thickness of the element (e.g., wall thickness)"),
-      height: z
-        .number()
-        .optional()
-        .describe("Height of the element (e.g., wall height)"),
+      data: z
+        .array(
+          z.object({
+            name: z
+              .string()
+              .describe("Description of the element (e.g., wall, beam)"),
+            typeId: z
+              .number()
+              .optional()
+              .describe("The ID of the family type to create."),
+            locationLine: z
+              .object({
+                p0: z.object({
+                  x: z.number().describe("X coordinate of start point"),
+                  y: z.number().describe("Y coordinate of start point"),
+                  z: z.number().describe("Z coordinate of start point"),
+                }),
+                p1: z.object({
+                  x: z.number().describe("X coordinate of end point"),
+                  y: z.number().describe("Y coordinate of end point"),
+                  z: z.number().describe("Z coordinate of end point"),
+                }),
+              })
+              .describe("The line defining the element's location"),
+            thickness: z
+              .number()
+              .describe(
+                "Thickness/width of the element (e.g., wall thickness)"
+              ),
+            height: z
+              .number()
+              .describe("Height of the element (e.g., wall height)"),
+            baseLevel: z.number().describe("Base level height"),
+            baseOffset: z.number().describe("Offset from the base level"),
+          })
+        )
+        .describe("Array of line-based elements to create"),
     },
     async (args, extra) => {
-      const params = {
-        familyTypeId: args.familyTypeId,
-        startPoint: args.startPoint,
-        endPoint: args.endPoint,
-        structuralUsage: args.structuralUsage || false,
-        width: args.width || 0,
-        height: args.height || 0,
-      };
+      const params = args;
 
       try {
         const response = await withRevitConnection(async (revitClient) => {
