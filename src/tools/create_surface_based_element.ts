@@ -49,9 +49,10 @@ export function registerCreateSurfaceBasedElementTool(server: McpServer) {
       const params = args;
       try {
         const response = await withRevitConnection(async (revitClient) => {
-          return await revitClient.sendCommand("create_surface_based_element", {
-            params,
-          });
+          return await revitClient.sendCommand(
+            "create_surface_based_element",
+            params
+          );
         });
 
         return {
