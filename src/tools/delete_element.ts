@@ -5,13 +5,15 @@ import { withRevitConnection } from "../utils/ConnectionManager.js";
 export function registerDeleteElementTool(server: McpServer) {
   server.tool(
     "delete_element",
-    "Delete a specific element from the Revit model by its element ID.",
+    "Delete one or more elements from the Revit model by their element IDs.",
     {
-      elementId: z.string().describe("The ID of the element to delete"),
+      elementIds: z
+        .array(z.string())
+        .describe("The IDs of the elements to delete"),
     },
     async (args, extra) => {
       const params = {
-        elementId: args.elementId,
+        elementIds: args.elementIds,
       };
 
       try {
