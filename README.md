@@ -83,3 +83,5 @@ flowchart LR
 | search_modules             | Search for available modules              |
 | use_module                 | Use module                                |
 | send_code_to_revit         | Send code to Revit to execute             |
+| color_splash		     | Color elements based on a parameter value	|
+| tag_walls		     | Tag all walls in view            |
