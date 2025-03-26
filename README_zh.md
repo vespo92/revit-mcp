@@ -85,4 +85,6 @@ flowchart LR
 | search_modules             | 搜索可用模块                       |
 | use_module                 | 使用模块                           |
 | send_code_to_revit         | 发送代码到Revit中执行              |
+| color_splash		     | 基于参数值对元素进行着色 |
+| tag_walls		     | 在视图中标记所有墙体 |
 
