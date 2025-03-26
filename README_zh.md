@@ -8,6 +8,8 @@ revit-mcp 允许你通过支持mcp server的客户端（例如cladue、cline等�
 
 本项目是服务端（向AI提供Tools），还需要配合[revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin)（驱动Revit）使用。
 
+加入我们 [Discord](https://discord.gg/cGzUGurq)
+
 ## 特性
 
 - 允许AI获取Revit项目中的数据
@@ -80,7 +82,8 @@ flowchart LR
 | create_point_based_element  | 创建点式元素（例如门、窗、家具等） |
 | create_line_based_element   | 创建线式元素（例如墙、梁、管道等） |
 | create_surface_based_element   | 创建面状元素（例如地板、天花板等） |
-| delete_element             | 删除元素                           |
+| delete_elements             | 删除元素                           |
+| reset_model                | 重置模型(在执行连续对话时，删除过程模型) |
 | modify_element             | 修改元素的属性（实例参数）         |
 | search_modules             | 搜索可用模块                       |
 | use_module                 | 使用模块                           |

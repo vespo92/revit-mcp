@@ -8,6 +8,8 @@ revit-mcp allows you to interact with Revit using the MCP protocol through MCP-s
 
 This project is the server side (providing Tools to AI), and you need to use [revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin) (driving Revit) in conjunction.
 
+Join [Discord](https://discord.gg/cGzUGurq)
+
 ## features
 
 - Allow AI to get data from the Revit project
@@ -78,7 +80,8 @@ flowchart LR
 | create_point_based_element  | Create point based element (door, window, furniture) |
 | create_line_based_element   | Create line based element (wall, beam, pipe) |
 | create_surface_based_element   | Create surface based element (floor, ceiling) |
-| delete_element             | Delete element                            |
+| delete_elements             | Delete elements                            |
+| reset_model                | Reset model (delete process model when executing continuous dialog) |
 | modify_element             | Modify element's properties (instance parameters) |
 | search_modules             | Search for available modules              |
 | use_module                 | Use module                                |
