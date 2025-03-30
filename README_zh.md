@@ -8,7 +8,7 @@ revit-mcp 允许你通过支持mcp server的客户端（例如cladue、cline等�
 
 本项目是服务端（向AI提供Tools），还需要配合[revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin)（驱动Revit）使用。
 
-加入我们 [Discord](https://discord.gg/cGzUGurq)
+加入我们 [Discord](https://discord.gg/cGzUGurq) | [QQ群](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=kLnQiFVtYBytHm7R58KFoocd3mzU_9DR&authKey=fyXDOBmXP7FMkXAWjddWZumblxKJH7ZycYyLp40At3t9%2FOfSZyVO7zyYgIROgSHF&noverify=0&group_code=792379482)
 
 ## 特性
 
@@ -65,9 +65,25 @@ Claude客户端->Settings > Developer > Edit Config > claude_desktop_config.json
 
 ```mermaid
 flowchart LR
-	CladueDesktop --> RevitMcp --> RevitMcpPlugin
-	subgraph ide1 [Revit]
-	RevitMcpPlugin --> RevitAPI
+	CladueDesktop --> revit-mcp --> SocketService--commandName-->CommandlSet--command-->CommandExecute
+	CommandManager --> CommandlSet
+	CommandExecute --executeResult--> SocketService
+	CommandProject1 --> CommandManager
+	CommandProject2 --> CommandManager
+	CommandProject... --> CommandManager
+	subgraph ide1 [MCPClient]
+	CladueDesktop
+	end
+	subgraph ide2 [MCPServer]
+	revit-mcp
+	end
+	subgraph ide3 [Revit]
+			subgraph ide3.1 [revit-mcp-plugin]
+				SocketService
+				CommandlSet
+				CommandManager
+				CommandExecute
+			end
 	end
 ```
 
