@@ -2,27 +2,27 @@
 
 English | [简体中文](README_zh.md)
 
-## description
+## Description
 
 revit-mcp allows you to interact with Revit using the MCP protocol through MCP-supported clients (such as Claude, Cline, etc.).
 
 This project is the server side (providing Tools to AI), and you need to use [revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin) (driving Revit) in conjunction.
 
-Join [Discord](https://discord.gg/cGzUGurq)
+Join [Discord](https://discord.gg/cGzUGurq) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=kLnQiFVtYBytHm7R58KFoocd3mzU_9DR&authKey=fyXDOBmXP7FMkXAWjddWZumblxKJH7ZycYyLp40At3t9%2FOfSZyVO7zyYgIROgSHF&noverify=0&group_code=792379482)
 
-## features
+## Features
 
 - Allow AI to get data from the Revit project
 - Allow AI to drive Revit to create, modify, and delete elements
 - Send AI-generated code to Revit to execute (may not be successful, successful rate is higher in some simple scenarios with clear requirements)
 
-## environment requirements
+## Requirements
 
 - nodejs 18+
 
 > Complete installation environment still needs to consider the needs of revit-mcp-plugin, please refer to [revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin)
 
-## installation process
+## Installation
 
 ### 1. Build local MCP service
 
@@ -59,13 +59,29 @@ Restart the Claude client. When you see the hammer icon, it means the connection
 
 ![claude](./assets/claude.png)
 
-## implementation framework
+## Framework
 
 ```mermaid
 flowchart LR
-	CladueDesktop --> RevitMcp --> RevitMcpPlugin
-	subgraph ide1 [Revit]
-	RevitMcpPlugin --> RevitAPI
+	CladueDesktop --> revit-mcp --> SocketService--commandName-->CommandlSet--command-->CommandExecute
+	CommandManager --> CommandlSet
+	CommandExecute --executeResult--> SocketService
+	CommandProject1 --> CommandManager
+	CommandProject2 --> CommandManager
+	CommandProject... --> CommandManager
+	subgraph ide1 [MCPClient]
+	CladueDesktop
+	end
+	subgraph ide2 [MCPServer]
+	revit-mcp
+	end
+	subgraph ide3 [Revit]
+			subgraph ide3.1 [revit-mcp-plugin]
+				SocketService
+				CommandlSet
+				CommandManager
+				CommandExecute
+			end
 	end
 ```
 
