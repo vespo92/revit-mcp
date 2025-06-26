@@ -4,6 +4,8 @@
 
 English | [简体中文](README_zh.md)
 
+> ⚠️ **Security Notice**: Version 2.0 includes critical security fixes. Users of v1.x should upgrade immediately. See [MIGRATION.md](MIGRATION.md) for upgrade instructions.
+
 ## Description
 
 revit-mcp allows you to interact with Revit using the MCP protocol through MCP-supported clients (such as Claude, Cline, etc.).
@@ -89,6 +91,7 @@ flowchart LR
 
 ## Supported Tools
 
+### Core Tools
 | Name                      | Description                               |
 | ------------------------- | ----------------------------------------- |
 | get_current_view_info     | Get current view info                     |
@@ -103,6 +106,16 @@ flowchart LR
 | modify_element             | Modify element's properties (instance parameters) |
 | search_modules             | Search for available modules              |
 | use_module                 | Use module                                |
-| send_code_to_revit         | Send code to Revit to execute             |
 | color_splash		     | Color elements based on a parameter value	|
 | tag_walls		     | Tag all walls in view            |
+| ai_element_filter         | Intelligent element querying with filters |
+| operate_element           | Perform operations on elements (hide, isolate, etc) |
+
+### Enhanced Tools (v2.0+)
+| Name                      | Description                               |
+| ------------------------- | ----------------------------------------- |
+| duplicate_floor_elements  | Duplicate entire floors with intelligent filtering |
+| elevator_automation       | Complete elevator system automation |
+| send_code_to_revit_secure | Secure code execution with validation |
+
+See [README-ENHANCED.md](README-ENHANCED.md) for detailed documentation on enhanced features.
