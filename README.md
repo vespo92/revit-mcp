@@ -2,8 +2,6 @@
 
 # revit-mcp
 
-English | [简体中文](README_zh.md)
-
 > ⚠️ **Security Notice**: Version 2.0 includes critical security fixes. Users of v1.x should upgrade immediately. See [MIGRATION.md](MIGRATION.md) for upgrade instructions.
 
 ## Description
@@ -11,8 +9,6 @@ English | [简体中文](README_zh.md)
 revit-mcp allows you to interact with Revit using the MCP protocol through MCP-supported clients (such as Claude, Cline, etc.).
 
 This project is the server side (providing Tools to AI), and you need to use [revit-mcp-plugin](https://github.com/revit-mcp/revit-mcp-plugin) (driving Revit) in conjunction.
-
-Join [Discord](https://discord.gg/cGzUGurq) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=kLnQiFVtYBytHm7R58KFoocd3mzU_9DR&authKey=fyXDOBmXP7FMkXAWjddWZumblxKJH7ZycYyLp40At3t9%2FOfSZyVO7zyYgIROgSHF&noverify=0&group_code=792379482)
 
 ## Features
 

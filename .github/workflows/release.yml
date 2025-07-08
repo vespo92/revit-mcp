@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Create Release Archive
+      run: |
+        tar -czf revit-mcp-${{ github.ref_name }}.tar.gz \
+          build/ \
+          package.json \
+          package-lock.json \
+          README.md \
+          README-ENHANCED.md \
+          ESPO-USAGE.md \
+          LICENSE \
+          .env.example
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: revit-mcp-${{ github.ref_name }}.tar.gz
+        generate_release_notes: true
+        body: |
+          ## Installation
+          
+          1. Download the release archive
+          2. Extract: `tar -xzf revit-mcp-${{ github.ref_name }}.tar.gz`
+          3. Install dependencies: `npm install --production`
+          4. Configure environment variables (see `.env.example`)
+          5. Add to MCP client configuration
+          
+          ## What's Changed
+          See below for full changelog.
+    
+    - name: Build Docker Image
+      run: |
+        docker build -t ghcr.io/espocorp/revit-mcp:${{ github.ref_name }} .
+        docker tag ghcr.io/espocorp/revit-mcp:${{ github.ref_name }} ghcr.io/espocorp/revit-mcp:latest
+    
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Push Docker Images
+      run: |
+        docker push ghcr.io/espocorp/revit-mcp:${{ github.ref_name }}
+        docker push ghcr.io/espocorp/revit-mcp:latest
+    
+    - name: Publish to NPM (if applicable)
+      if: contains(github.ref, 'beta') == false
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
