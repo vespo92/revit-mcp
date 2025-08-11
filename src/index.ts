@@ -1,9 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
 import { registerTools } from "./tools/register.js";
 import { validateEnvironment } from "./utils/config.js";
-import { setupGracefulShutdown } from "./utils/shutdown.js";
 import { logger } from "./utils/logger.js";
+import { setupGracefulShutdown } from "./utils/shutdown.js";
 
 // Validate environment variables on startup
 validateEnvironment();

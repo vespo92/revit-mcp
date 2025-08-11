@@ -1,7 +1,10 @@
-import { z } from "zod";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { withRevitConnection } from "../utils/ConnectionManager.js";
 import crypto from "crypto";
+
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
+
+import { withRevitConnection } from "../utils/ConnectionManager.js";
+
 
 // Whitelist of allowed Revit API namespaces
 const ALLOWED_NAMESPACES = [
@@ -175,7 +178,7 @@ export function registerSendCodeToRevitSecureTool(server: McpServer) {
         codeToExecute = args.data.code;
       } else {
         // Use pre-approved template
-        codeToExecute = CODE_TEMPLATES[args.data.template as keyof typeof CODE_TEMPLATES];
+        codeToExecute = CODE_TEMPLATES[args.data.template];
         if (!codeToExecute) {
           return {
             content: [{

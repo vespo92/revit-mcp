@@ -26,11 +26,15 @@
     "docker:logs": "docker-compose logs -f"
   },
   "files": [
-    "build",
-    "docker-compose.yml",
-    ".env.example",
-    "README-ENHANCED.md"
+    "build/**/*",
+    "README.md",
+    "LICENSE",
+    "package.json"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/espocorp/revit-mcp.git"

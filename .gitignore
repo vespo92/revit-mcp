@@ -29,23 +29,10 @@ dist/
 # Docker volumes
 chroma-data/
 redis-data/
-ollama-data/
-prometheus-data/
-grafana-data/
 
 # Logs
 logs/
 *.log
-pyrevit-bridge/logs/
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-.Python
-venv/
-env/
-.venv
 
 # Security
 *.pem
@@ -68,7 +55,6 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
-*~
 
 # MCP specific
 mcp-cache/

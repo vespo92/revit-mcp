@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # ChromaDB for vector embeddings and intelligent element search
+  # ChromaDB for vector embeddings and intelligent element search (optional)
   chromadb:
     image: chromadb/chroma:latest
     container_name: revit-mcp-chromadb
@@ -19,7 +19,7 @@ services:
     networks:
       - revit-mcp-network
 
-  # Redis for caching and rate limiting
+  # Redis for caching and rate limiting (optional)
   redis:
     image: redis:7-alpine
     container_name: revit-mcp-redis
@@ -36,90 +36,10 @@ services:
     networks:
       - revit-mcp-network
 
-  # PyRevit Bridge Service (Python service that runs alongside Revit)
-  pyrevit-bridge:
-    build:
-      context: ./pyrevit-bridge
-      dockerfile: Dockerfile
-    container_name: revit-mcp-pyrevit-bridge
-    ports:
-      - "5000:5000"
-    environment:
-      - FLASK_ENV=production
-      - API_KEY=${REVIT_MCP_API_KEY}
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-revit-mcp-redis-pass}@redis:6379/0
-      - CHROMA_URL=http://chromadb:8000
-      - CHROMA_TOKEN=${CHROMA_AUTH_TOKEN:-test-token}
-    depends_on:
-      - redis
-      - chromadb
-    restart: unless-stopped
-    networks:
-      - revit-mcp-network
-    volumes:
-      - ./pyrevit-bridge/logs:/app/logs
-
-  # Ollama for local LLM inference (optional, for intelligent element analysis)
-  ollama:
-    image: ollama/ollama:latest
-    container_name: revit-mcp-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ./ollama-data:/root/.ollama
-    environment:
-      - OLLAMA_MODELS=${OLLAMA_MODELS:-codellama:7b,nomic-embed-text}
-    restart: unless-stopped
-    networks:
-      - revit-mcp-network
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-  # Monitoring with Prometheus (optional)
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: revit-mcp-prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-    restart: unless-stopped
-    networks:
-      - revit-mcp-network
-
-  # Grafana for visualization (optional)
-  grafana:
-    image: grafana/grafana:latest
-    container_name: revit-mcp-grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
-      - GF_INSTALL_PLUGINS=redis-datasource
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-    depends_on:
-      - prometheus
-    restart: unless-stopped
-    networks:
-      - revit-mcp-network
-
 networks:
   revit-mcp-network:
     driver: bridge
 
 volumes:
-  prometheus-data:
-  grafana-data:
+  chroma-data:
+  redis-data:
