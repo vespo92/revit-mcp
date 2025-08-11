@@ -1,6 +1,6 @@
 {
   "name": "revit-mcp",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Enhanced Revit MCP server with elevator automation, floor duplication, and intelligent element search. Secure implementation with authentication and rate limiting.",
   "main": "index.js",
   "type": "module",
