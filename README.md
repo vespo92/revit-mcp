@@ -9,16 +9,25 @@
 [![GitHub Stars](https://img.shields.io/github/stars/espocorp/revit-mcp)](https://github.com/espocorp/revit-mcp)
 [![GitHub Issues](https://img.shields.io/github/issues/espocorp/revit-mcp)](https://github.com/espocorp/revit-mcp/issues)
 
-**AI-Powered Revit Automation through Model Context Protocol**
+**AI-Powered Revit Automation with AutoCAD, PDF, and Excel Integration**
 
-A TypeScript implementation of an MCP (Model Context Protocol) server for Autodesk Revit, enabling AI assistants like Claude to interact with and automate Revit through natural language conversations.
+A comprehensive TypeScript MCP (Model Context Protocol) server for Autodesk Revit with AutoCAD DXF, PDF, and Excel integration. Enable AI assistants like Claude to interact with and automate Revit, coordinate with AutoCAD drawings, generate reports, and manage data across multiple platforms through natural language.
 
 ## 🌟 Features
 
+### Core Revit Automation
 - 🤖 **AI-Native Integration**: Built specifically for AI assistants to understand and manipulate Revit models
-- 🔧 **Comprehensive Tool Set**: 20+ specialized tools for creating, modifying, and analyzing Revit elements
+- 🔧 **Comprehensive Tool Set**: 25+ specialized tools for creating, modifying, and analyzing Revit elements
 - 🏢 **Advanced Automation**: Elevator systems, floor duplication, and intelligent element operations
 - 🔍 **Smart Filtering**: AI-powered element querying with natural language understanding
+
+### Cross-Platform Integration
+- 📐 **AutoCAD DXF Support**: Import/export DXF files, parse metadata, coordinate with AutoCAD drawings
+- 📄 **PDF Generation & Parsing**: Generate PDFs from Revit views/sheets, extract text from construction documents
+- 📊 **Excel Integration**: Export schedules, import parameters, generate quantity takeoffs with formatting
+- 🔄 **AutoCAD Coordination**: Compare Revit models with AutoCAD drawings, identify discrepancies, generate reports
+
+### Security & Performance
 - 🔐 **Secure Code Execution**: Validated and sandboxed code execution environment
 - ⚡ **Real-time Communication**: WebSocket-based connection for instant feedback
 - 📊 **Optional Caching**: Redis integration for performance optimization
@@ -114,6 +123,30 @@ CHROMA_AUTH_TOKEN=your-chroma-token
 | `elevator_automation` | Complete elevator system design and placement |
 | `tag_all_walls` | Automatically tag walls in views |
 | `send_code_to_revit_secure` | Execute validated C# code in Revit |
+
+### AutoCAD Integration
+
+| Tool | Description |
+|------|-------------|
+| `import_dxf` | Import AutoCAD DXF files and convert to Revit elements |
+| `export_to_dxf` | Export Revit elements to AutoCAD DXF format |
+| `parse_dxf_metadata` | Extract metadata and structure from DXF files |
+| `coordinate_with_autocad` | Compare Revit with AutoCAD, generate coordination reports |
+
+### PDF Tools
+
+| Tool | Description |
+|------|-------------|
+| `generate_pdf_from_view` | Generate PDF documents from Revit views or sheets |
+| `extract_pdf_text` | Extract text content from PDF construction documents |
+
+### Excel Integration
+
+| Tool | Description |
+|------|-------------|
+| `export_schedule_to_excel` | Export Revit schedules to Excel with formatting |
+| `import_parameters_from_excel` | Import parameter values from Excel for bulk updates |
+| `generate_quantity_takeoff` | Generate material quantity takeoff reports in Excel |
 
 ### Module System
 
@@ -230,6 +263,7 @@ npm run test:integration
 
 Once configured, you can interact with Revit through Claude:
 
+### Basic Revit Operations
 ```
 User: "Create a 10-foot wall at the origin"
 Claude: I'll create a wall for you using the Revit MCP tools...
@@ -242,6 +276,47 @@ Claude: Let me query the elements in your current view...
 User: "Duplicate the 3rd floor layout to the 5th floor"
 Claude: I'll help you duplicate the floor elements...
 [Copies all elements with intelligent filtering]
+```
+
+### AutoCAD Integration
+```
+User: "Import the site plan DXF file and place it on the Site level"
+Claude: I'll import the DXF file and convert the entities to Revit elements...
+[Imports DXF with coordinate conversion]
+
+User: "Compare my Revit model with the architect's latest DXF and generate a coordination report"
+Claude: I'll analyze both files and create a coordination report in Excel...
+[Generates detailed discrepancy report]
+
+User: "Export the current floor plan to DXF for the MEP engineer"
+Claude: I'll export the visible elements to DXF format...
+[Creates DXF file with proper layering]
+```
+
+### PDF & Documentation
+```
+User: "Generate PDFs of all construction sheets and save them to the output folder"
+Claude: I'll export all sheets to PDF with title blocks...
+[Creates multi-page PDF document]
+
+User: "Extract all text from the specifications PDF"
+Claude: I'll parse the PDF and extract the text content...
+[Returns structured text data]
+```
+
+### Excel Integration & Reporting
+```
+User: "Export the door schedule to Excel with formatting"
+Claude: I'll create a formatted Excel file with your door schedule...
+[Generates Excel with formulas and formatting]
+
+User: "Generate a quantity takeoff for all walls, including materials and costs"
+Claude: I'll create a comprehensive quantity takeoff report...
+[Creates multi-sheet Excel with calculations]
+
+User: "Import room numbers from the Excel file and update all rooms"
+Claude: I'll read the Excel file and update the room parameters...
+[Bulk updates parameters from Excel]
 ```
 
 ## 🤝 Contributing
