@@ -30,7 +30,7 @@ export function registerColorElementsTool(server: McpServer) {
             .optional()
             .describe("Optional array of custom RGB colors to use for specific parameter values"),
       },
-      async (args, extra) => {
+      async (args, _extra) => {
         const params = args;
         try {
           const response = await withRevitConnection(async (revitClient) => {

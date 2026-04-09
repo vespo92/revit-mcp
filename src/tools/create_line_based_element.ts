@@ -46,7 +46,7 @@ export function registerCreateLineBasedElementTool(server: McpServer) {
         )
         .describe("Array of line-based elements to create"),
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = args;
 
       try {

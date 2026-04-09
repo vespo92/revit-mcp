@@ -1,6 +1,6 @@
 {
   "name": "revit-mcp",
-  "version": "2.1.0",
+  "version": "2.3.0",
   "description": "Enhanced Revit MCP server with AutoCAD, PDF, and Excel integration. Includes elevator automation, floor duplication, intelligent element search, and cross-platform data exchange. Secure implementation with authentication and rate limiting.",
   "main": "index.js",
   "type": "module",
@@ -23,7 +23,8 @@
     "typecheck": "tsc --noEmit",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f"
+    "docker:logs": "docker-compose logs -f",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "build/**/*",
@@ -37,7 +38,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/espocorp/revit-mcp.git"
+    "url": "git+https://github.com/vespo92/revit-mcp.git"
   },
   "keywords": [
     "revit",
@@ -54,9 +55,9 @@
   "author": "ESPO Corporation",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/espocorp/revit-mcp/issues"
+    "url": "https://github.com/vespo92/revit-mcp/issues"
   },
-  "homepage": "https://github.com/espocorp/revit-mcp#readme",
+  "homepage": "https://github.com/vespo92/revit-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
     "ws": "^8.18.1",

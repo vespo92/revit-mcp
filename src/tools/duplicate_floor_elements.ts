@@ -64,7 +64,7 @@ export function registerDuplicateFloorElementsTool(server: McpServer) {
           .describe("Additional options for the duplication process")
       })
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = {
         sourceLevelId: args.data.sourceLevelId,
         targetLevelIds: args.data.targetLevelIds,

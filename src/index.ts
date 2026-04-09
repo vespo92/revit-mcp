@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
@@ -12,7 +13,7 @@ validateEnvironment();
 // Create server instance with proper version
 const server = new McpServer({
   name: "revit-mcp",
-  version: "2.0.0",
+  version: "2.3.0",
 });
 
 // Start server with enhanced error handling
@@ -29,7 +30,7 @@ async function main(): Promise<void> {
     // Setup graceful shutdown handlers
     setupGracefulShutdown(server);
     
-    logger.info("Revit MCP Server v2.0.0 started successfully");
+    logger.info("Revit MCP Server v2.3.0 started successfully");
   } catch (error) {
     logger.error("Failed to start Revit MCP Server", error);
     process.exit(1);

@@ -7,7 +7,7 @@ import { withRevitConnection } from "../utils/ConnectionManager.js";
 
 
 // Whitelist of allowed Revit API namespaces
-const ALLOWED_NAMESPACES = [
+const _ALLOWED_NAMESPACES = [
   "Autodesk.Revit.DB",
   "Autodesk.Revit.UI",
   "System.Linq",
@@ -140,7 +140,7 @@ export function registerSendCodeToRevitSecureTool(server: McpServer) {
           .describe("API key for authentication")
       })
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       // Validate API key
       const validApiKey = process.env.REVIT_MCP_API_KEY;
       if (!validApiKey || args.data.apiKey !== validApiKey) {

@@ -21,11 +21,7 @@ export class RevitClientConnection {
     });
 
     this.socket.on("data", (data) => {
-      // 将接收到的数据添加到缓冲区
-      const dataString = data.toString();
-      this.buffer += dataString;
-
-      // 尝试解析完整的JSON响应
+      this.buffer += data.toString();
       this.processBuffer();
     });
 
@@ -40,14 +36,49 @@ export class RevitClientConnection {
   }
 
   private processBuffer(): void {
-    try {
-      // 尝试解析JSON
-      const response = JSON.parse(this.buffer);
-      // 如果成功解析，处理响应并清空缓冲区
-      this.handleResponse(this.buffer);
+    // Handle multiple JSON messages and partial buffers
+    let startIndex = 0;
+    let braceDepth = 0;
+    let inString = false;
+    let escape = false;
+
+    for (let i = 0; i < this.buffer.length; i++) {
+      const char = this.buffer[i];
+
+      if (escape) {
+        escape = false;
+        continue;
+      }
+
+      if (char === '\\' && inString) {
+        escape = true;
+        continue;
+      }
+
+      if (char === '"') {
+        inString = !inString;
+        continue;
+      }
+
+      if (inString) continue;
+
+      if (char === '{') {
+        if (braceDepth === 0) startIndex = i;
+        braceDepth++;
+      } else if (char === '}') {
+        braceDepth--;
+        if (braceDepth === 0) {
+          const jsonStr = this.buffer.substring(startIndex, i + 1);
+          this.handleResponse(jsonStr);
+        }
+      }
+    }
+
+    // Keep only unprocessed data in buffer
+    if (braceDepth === 0) {
       this.buffer = "";
-    } catch (e) {
-      // 如果解析失败，可能是因为数据不完整，继续等待更多数据
+    } else {
+      this.buffer = this.buffer.substring(startIndex);
     }
   }
 
@@ -77,7 +108,6 @@ export class RevitClientConnection {
   private handleResponse(responseData: string): void {
     try {
       const response = JSON.parse(responseData);
-      // 从响应中获取ID
       const requestId = response.id || "default";
 
       const callback = this.responseCallbacks.get(requestId);
@@ -97,10 +127,8 @@ export class RevitClientConnection {
           this.connect();
         }
 
-        // 生成请求ID
         const requestId = this.generateRequestId();
 
-        // 创建符合JSON-RPC标准的请求对象
         const commandObj = {
           jsonrpc: "2.0",
           method: command,
@@ -108,7 +136,6 @@ export class RevitClientConnection {
           id: requestId,
         };
 
-        // 存储回调函数
         this.responseCallbacks.set(requestId, (responseData) => {
           try {
             const response = JSON.parse(responseData);
@@ -128,17 +155,16 @@ export class RevitClientConnection {
           }
         });
 
-        // 发送命令
         const commandString = JSON.stringify(commandObj);
         this.socket.write(commandString);
 
-        // 设置超时
+        // 2 minute timeout
         setTimeout(() => {
           if (this.responseCallbacks.has(requestId)) {
             this.responseCallbacks.delete(requestId);
             reject(new Error(`Command timed out after 2 minutes: ${command}`));
           }
-        }, 120000); // 2分钟超时
+        }, 120000);
       } catch (error) {
         reject(error);
       }

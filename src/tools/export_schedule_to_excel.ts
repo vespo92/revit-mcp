@@ -141,7 +141,7 @@ export function registerExportScheduleToExcelTool(server: McpServer) {
           }
 
           // Auto-fit columns
-          worksheet.columns.forEach((column, index) => {
+          worksheet.columns.forEach((column, _index) => {
             let maxLength = 0;
             column.eachCell({ includeEmpty: true }, (cell) => {
               const cellValue = cell.value ? cell.value.toString() : "";

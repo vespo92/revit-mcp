@@ -29,7 +29,7 @@ export function registerGetCurrentViewElementsTool(server: McpServer) {
         .optional()
         .describe("Maximum number of elements to return"),
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = {
         modelCategoryList: args.modelCategoryList || [],
         annotationCategoryList: args.annotationCategoryList || [],

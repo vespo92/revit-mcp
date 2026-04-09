@@ -102,7 +102,7 @@ export function registerElevatorAutomationTool(server: McpServer) {
           .describe("Parameters for creating floor openings for elevator shaft")
       })
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = {
         action: args.data.action,
         ...args.data
@@ -117,34 +117,37 @@ export function registerElevatorAutomationTool(server: McpServer) {
         let message = `Elevator automation: ${args.data.action} completed successfully!\n\n`;
 
         switch (args.data.action) {
-          case "create_shaft":
+          case "create_shaft": {
             const shaftResult = response as { shaftWallIds: number[], pitId?: number };
             message += `Created shaft with ${shaftResult.shaftWallIds.length} walls\n`;
             if (shaftResult.pitId) {
               message += `Pit created with ID: ${shaftResult.pitId}\n`;
             }
             break;
+          }
 
-          case "place_doors":
+          case "place_doors": {
             const doorResult = response as { placedDoorIds: number[], failedLevels: number[] };
             message += `Placed ${doorResult.placedDoorIds.length} doors\n`;
             if (doorResult.failedLevels.length > 0) {
               message += `Failed to place doors at levels: ${doorResult.failedLevels.join(", ")}\n`;
             }
             break;
+          }
 
-          case "duplicate_to_floors":
-            const dupResult = response as { 
-              duplicatedCount: number, 
-              byLevel: { [key: number]: number[] } 
+          case "duplicate_to_floors": {
+            const dupResult = response as {
+              duplicatedCount: number,
+              byLevel: { [key: number]: number[] }
             };
             message += `Duplicated ${dupResult.duplicatedCount} elements\n`;
             Object.entries(dupResult.byLevel).forEach(([level, ids]) => {
               message += `- Level ${level}: ${ids.length} elements\n`;
             });
             break;
+          }
 
-          case "analyze_existing":
+          case "analyze_existing": {
             const analysis = response as {
               elevatorCount: number,
               elevators: Array<{
@@ -160,12 +163,13 @@ export function registerElevatorAutomationTool(server: McpServer) {
               message += `  Dimensions: ${elev.dimensions.width}mm x ${elev.dimensions.depth}mm\n`;
             });
             break;
+          }
 
-          case "create_machine_room":
-            const roomResult = response as { 
-              roomId: number, 
-              wallIds: number[], 
-              equipmentIds?: number[] 
+          case "create_machine_room": {
+            const roomResult = response as {
+              roomId: number,
+              wallIds: number[],
+              equipmentIds?: number[]
             };
             message += `Created machine room ID: ${roomResult.roomId}\n`;
             message += `Walls created: ${roomResult.wallIds.length}\n`;
@@ -173,8 +177,9 @@ export function registerElevatorAutomationTool(server: McpServer) {
               message += `Equipment placed: ${roomResult.equipmentIds.length} items\n`;
             }
             break;
+          }
 
-          case "create_opening":
+          case "create_opening": {
             const openingResult = response as {
               openingIds: number[],
               modifiedFloors: number[]
@@ -182,6 +187,7 @@ export function registerElevatorAutomationTool(server: McpServer) {
             message += `Created ${openingResult.openingIds.length} openings\n`;
             message += `Modified ${openingResult.modifiedFloors.length} floors\n`;
             break;
+          }
         }
 
         return {

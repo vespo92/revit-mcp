@@ -7,65 +7,50 @@ on:
     branches: [ main ]
 
 jobs:
-  # Simplified CI - Build only for now
-  # Tests and linting disabled until properly configured
-  
   build:
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18, 20, 22]
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: npm ci
-    
+
+    - name: Lint
+      run: npx eslint src/ --ext .ts
+
     - name: Build TypeScript
       run: npm run build
-    
+
     - name: Verify build output
-      run: |
-        echo "✅ Build successful for Node.js ${{ matrix.node-version }}"
-        ls -la build/
-        
+      run: ls -la build/
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       if: matrix.node-version == '20'
       with:
         name: build-files
         path: build/
-  
-  # Security audit is still valuable and should work
+
   security:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
+    - name: Install dependencies
+      run: npm ci
+
     - name: Run security audit
       run: npm audit --audit-level=high
-      continue-on-error: true  # Don't fail CI for audit issues
-  
-  # Placeholder for future improvements
-  # TODO: Re-enable after fixing:
-  # - Jest configuration (ES modules)
-  # - ESLint TypeScript resolver
-  # - Add basic test files
-  
-  # lint:
-  #   # Disabled: ESLint configuration needs fixing
-  #   # Error: "typescript with invalid interface loaded as resolver"
-  
-  # test:
-  #   # Disabled: Jest configuration incompatible with ES modules
-  #   # Error: "module is not defined in ES module scope"
-  #   # Also: No test files exist after cleanup
+      continue-on-error: true

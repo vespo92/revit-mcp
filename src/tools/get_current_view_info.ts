@@ -7,7 +7,7 @@ export function registerGetCurrentViewInfoTool(server: McpServer) {
     "get_current_view_info",
     "获取 Revit 当前活动视图的详细信息，包括视图类型、名称、比例等属性。",
     {},
-    async (args, extra) => {
+    async (_args, _extra) => {
       try {
         const response = await withRevitConnection(async (revitClient) => {
           return await revitClient.sendCommand("get_current_view_info", {});

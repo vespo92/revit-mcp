@@ -40,7 +40,7 @@ export function registerCreatePointBasedElementTool(server: McpServer) {
         )
         .describe("Array of point-based elements to create"),
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = args;
 
       try {

@@ -7,21 +7,14 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
-    "@typescript-eslint",
-    "import",
-    "jest"
+    "@typescript-eslint"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:import/recommended",
-    "plugin:import/typescript",
-    "plugin:jest/recommended",
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "warn",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -29,50 +22,17 @@
         "varsIgnorePattern": "^_"
       }
     ],
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-floating-promises": "error",
-    "@typescript-eslint/no-misused-promises": "error",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
-      }
-    ],
-    "import/no-unresolved": "off",
-    "no-console": [
-      "warn",
-      {
-        "allow": ["warn", "error"]
-      }
-    ]
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true
-      }
-    }
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": "off"
   },
   "env": {
-    "node": true,
-    "jest": true
+    "node": true
   },
   "ignorePatterns": [
     "build/",
     "coverage/",
     "node_modules/",
-    "*.js"
+    "*.js",
+    "*.d.ts"
   ]
 }

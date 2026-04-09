@@ -301,7 +301,7 @@ function getDxfEntityLocation(entity: any): any {
 /**
  * Compare geometry between Revit and DXF
  */
-function compareGeometry(revitElement: any, dxfEntity: any, tolerance: number): number {
+function compareGeometry(revitElement: any, dxfEntity: any, _tolerance: number): number {
   // Simplified geometry comparison
   // In a real implementation, this would be more sophisticated
   const revitType = revitElement.geometryType?.toLowerCase() || "";

@@ -12,7 +12,7 @@ export function registerDeleteElementTool(server: McpServer) {
         .array(z.string())
         .describe("The IDs of the elements to delete"),
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = {
         elementIds: args.elementIds,
       };

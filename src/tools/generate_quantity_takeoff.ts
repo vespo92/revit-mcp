@@ -182,7 +182,7 @@ function createDetailedQuantitiesSheet(
   worksheet: ExcelJS.Worksheet,
   details: any[],
   includeFormulas: boolean,
-  groupBy: string
+  _groupBy: string
 ) {
   // Headers
   const headers = [

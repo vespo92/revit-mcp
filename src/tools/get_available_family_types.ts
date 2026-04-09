@@ -23,7 +23,7 @@ export function registerGetAvailableFamilyTypesTool(server: McpServer) {
         .optional()
         .describe("Maximum number of family types to return"),
     },
-    async (args, extra) => {
+    async (args, _extra) => {
       const params = {
         categoryList: args.categoryList || [],
         familyNameFilter: args.familyNameFilter || "",
